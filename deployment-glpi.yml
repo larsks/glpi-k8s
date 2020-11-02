@@ -16,7 +16,7 @@ spec:
       containers:
 
         - name: glpi
-          image: larsks/glpi:3cdf4adb
+          image: larsks/glpi:a2196ebb
           ports:
             - containerPort: 9000
               name: glpi-fpm
