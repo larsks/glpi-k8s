@@ -1,0 +1,19 @@
+namespace: moc-ops
+commonLabels:
+  app: glpi
+
+resources:
+  - deployment-glpi.yml
+  - deployment-nginx.yml
+  - deployment-mariadb.yml
+  - volumes.yml
+  - services.yml
+  - routes.yml
+
+generators:
+  - secret-generator.yml
+
+configMapGenerator:
+  - name: nginx-config
+    files:
+      - default.conf

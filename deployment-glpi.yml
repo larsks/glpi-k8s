@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glpi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: glpi
+  strategy:
+    type: Recreate
+  template:
+    spec:
+
+      containers:
+
+        - name: glpi
+          image: larsks/glpi:3cdf4adb
+          ports:
+            - containerPort: 9000
+              name: glpi-fpm
+          envFrom:
+            - secretRef:
+                name: glpi
+          env:
+            - name: MYSQL_HOST
+              value: mariadb
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: glpi-data
+
+      volumes:
+        - name: glpi-data
+          persistentVolumeClaim:
+            claimName: glpi-data

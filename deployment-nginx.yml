@@ -1,0 +1,42 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: glpi-nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: glpi-nginx
+  strategy:
+    type: Recreate
+  template:
+    spec:
+
+      containers:
+
+        - name: nginx
+          image: nginx:1.19.3-alpine
+          ports:
+            - containerPort: 8080
+              name: nginx
+          volumeMounts:
+            - mountPath: /var/www/html
+              name: glpi-data
+              readOnly: true
+            - mountPath: /etc/nginx/conf.d
+              name: nginx-config
+            - mountPath: /var/cache/nginx
+              name: nginx-cache
+            - mountPath: /var/run
+              name: nginx-cache
+
+      volumes:
+        - name: glpi-data
+          persistentVolumeClaim:
+            claimName: glpi-data
+        - name: nginx-config
+          configMap:
+            name: nginx-config
+        - name: nginx-cache
+          emptyDir:
